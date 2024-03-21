@@ -1,0 +1,145 @@
+/*
+Author: Henrique Neffa
+Course: CS106B - Programming Abstractions
+Assignment: Assignment 5 - Priority Queue
+Instructor: Christopher Gregg
+*/
+
+Warmup
+-------
+Q1. How do the values of the member variables of `allBalls[0]` change from iteration to iteration? Specifically, what happens to the values of `_id`, `_x`, and `_y`?
+A1. 
+_id is a fixed valued that doesn't change from iteration to iteration
+_x and _y change +1 or -1 depending on the direction that the ball is moving
+
+Q2. How do the values of the member variables of the stuck ball change from iteration to iteration? Contrast this to your answer to the previous question.
+A2. 
+_vx oscilates between -5 and 5 (negative and positive)
+_x
+x oscilates between 476 and 471 in a cyclic pattern
+
+Q3. After forcing the stuck ball to position (0, 0), does the ball move normally from there or does it stay stuck?
+A3. 
+The ball moves normally towards the southeast in my case
+
+Q4. On your system, what is the observed consequence of these memory errors:
+1 access an index outside the allocated array bounds?
+2 delete same memory twice?
+3 access memory after it has been deleted?
+A4. 
+1 Test case that access indexes beyond array bounds (Test failed due to the program triggering an exception)
+2 My program just crashes when operated
+3 It's a weird outcome. When I run it in debug mode, it gives error (first message below), but when I run it normally it actually returns a correct answer (second message below). However my ecpectation should be that we could not access this data given memory is unallocated
+
+
+Exception (PROVIDED_TEST, line 73) Test case that accesses memory after it was deleted
+
+Correct (PROVIDED_TEST, line 73) Test case that accesses memory after it was deleted
+
+PQArray
+-------
+Q5. There are extensive comments in both the interface (`pqarray.h`) and implementation (`pqarray.cpp`). Explain how and why the comments in the interface differ from those in the implementation. Consider both the content and audience for the documentation.
+A5. 
+on the interface, the comments are more around the why of the existence of each operation, while in the implementation it's about the how the implementation is occurring
+
+Q6. The class declares member variables `_numAllocated` and `_numFilled`. What is the difference between these two counts and why are both needed?
+A6. 
+_numAllocated is the number of slots allocated for memory usage (capacity)
+_numFilled is the number of slots actually filled in the implementation of this function
+
+Q7. Although code within the body of a member function can directly access the object's member variables, the implementer may instead choose to call public member functions to get information about the object. For example, note how the operations `isEmpty()` and `peek()` intentionally call `size()` instead of using `_numFilled` or how `dequeue()` calls `peek()` to retrieve the frontmost element. Why might be this be considered a better design?
+A7. 
+I believe allows for fewer errors given that you only implement once in one function and don't ahve to reimplement 
+
+Q8. Give the results from your time trials and explain how they support your prediction for the Big-O runtimes of `enqueue` and `dequeue`.
+A8. 
+Enqueue -> expect to be worst case N; average case n/2; best case 1, so Big O is n. The data below says that it is growing faster than simply n, but doesn't appear too exponential to the point of being nlogn or 2^n. So I guess the additional time is just the time to resize() the array
+Dequeue-> O(1) given you just remove last element (took 0.001 sec even at large volume, justifying my prediction)
+
+
+
+Enqueue:
+    Line 393 TIME_OPERATION fillQueue(pq, n) (size =    10000) completed in    0.180 secs
+    Line 350 TIME_OPERATION fillQueue(pq, n) (size =    20000) completed in    0.703 secs
+    Line 375 TIME_OPERATION fillQueue(pq, n) (size =    40000) completed in    2.731 secs
+    Line 384 TIME_OPERATION fillQueue(pq, n) (size =    80000) completed in   11.194 secs
+
+Dequeue:
+    Line 385 TIME_OPERATION emptyQueue(pq, n) (size =    80000) completed in    0.001 secs
+
+
+PQ Client
+---------
+Q9. Based on the Big O of `enqueue`/`dequeue`, what do you expect for the Big O of `pqSort` if using a `PQArray`? Run some timing trials to confirm your prediction, and include that data in your answer.
+A9. 
+O(n^2) because we have n for the loop and n for the enqueue operation. 
+
+
+Data: Between 1000 and 8000 we increase 8x, but seconds increase 20x (more than n)
+
+    Line 110 TIME_OPERATION pqSort(v) (size =     1000) completed in    0.005 secs
+    Line 110 TIME_OPERATION pqSort(v) (size =     2000) completed in    0.020 secs
+    Line 110 TIME_OPERATION pqSort(v) (size =     4000) completed in    0.029 secs
+    Line 110 TIME_OPERATION pqSort(v) (size =     8000) completed in    0.107 secs
+
+Q10. Based on the Big O of `enqueue`/`dequeue`, what do you expect for the Big O of `topK` in terms of `k` and `n` if using a `PQArray`? Run some timing trials to confirm your prediction, and include that data in your answer.
+A10. 
+O(n^2) given there is a while there will likely go through n elements and there is an enqueue (O(n)) operation within the while
+
+Data: Between 1000 and 8000 we increase 8x, but seconds increase >20x (more than n)
+
+    Line 126 TIME_OPERATION pqSort(v) (size =     1000) completed in    0.005 secs
+    Line 126 TIME_OPERATION pqSort(v) (size =     2000) completed in    0.020 secs
+    Line 126 TIME_OPERATION pqSort(v) (size =     4000) completed in    0.030 secs
+    Line 126 TIME_OPERATION pqSort(v) (size =     8000) completed in    0.112 secs
+
+PQHeap
+------
+Q11. Start with an empty binary heap and enqueue the nine `DataPoint`s in the order shown below and show the result. You only need to show the final heap, not intermediate steps. Draw the heap as tree-like diagram with root element on top, its two children below, and so on. Yes, we know that we're asking you to draw pictures in a text file (we love the [AsciiFlow](http://asciiflow.com/) tool for "drawing" in text).
+A11. 
+
+------T1-------
+---G2------B3
+R4----A5|S6-K7
+O8-V9|
+
+Q12. Make two calls to `dequeue` on the above binary heap and draw the updated result.
+A12. 
+------B3-------
+---R4------S6
+O8----A5|V9-K7
+
+
+Q13. Draw the array representation of the binary heap above. Label each element with its array index.
+A13. TODO
+
+0 - B3
+1 - R4
+2 - S6
+3 - O8
+4 - A5
+5 - V9
+6 - K7
+
+Q14. Re-run the timing trials on `pqclient.cpp` and provide your results that confirm that `pqSort` runs in time O(NlogN) and `topK` in O(NlogK).
+A14. TODO
+
+Embedded Ethics
+---------------
+Q15. Consider the differences between this three-bin priority queue and the priority queue you implemented on your assignment. Which would be more efficient to insert elements into and why? More generally, what are the benefits and disadvantages of using the three-bin priority queue vs. a regular priority queue?
+A15. 
+
+
+Q16. Describe a real-world system where a three-bin priority queue could be used. What factors would you use to distinguish between a low vs. medium vs. high priority element? What limitations might you need to consider when using a three-bin priority queue to represent this system?
+A16. TODO
+
+Q17. Different institutions consider different factors in admissions and convert criteria to numbers different ways.  Regardless of which specific factors are considered, should an admissions department use a purely numerical rankings based system? Why or why not?
+
+If yes, discuss what factors you think would be best to include when calculating numerical rankings and why those factors are well-represented as numbers. If not, discuss what factors you think should be considered in college admissions that would be difficult to represent as a numerical score. There are no right or wrong answers here - we're genuinely interested in your thoughts!
+A17. TODO
+
+Q18. Describe a real-world system that requires ranking but in which classification with a single number misses important context (i.e. a priority queue might not be the best way to store the objects being ranked). Make sure to use an example that hasn't already been discussed in lecture or in this assignment.
+A18. TODO
+
+Q19. How would you design an implementation for the hospital's priority queue that dynamically determines which patient is the best match whenever a new organ becomes available? __Note:__ Your design does not have to be the fastest or most efficient.
+A19. TODO

@@ -1,0 +1,77 @@
+/*
+Author: Henrique Neffa
+Course: CS106B - Programming Abstractions
+Assignment: Assignment 4 - Backtracking
+Instructor: Christopher Gregg
+*/
+
+Warmup
+------
+Q1. What is the value of `totalMoves` after stepping over the call to `moveTower` in `hanoiAnimation`?
+A1. 
+15
+
+Q2. What is the value of the `totalMoves` variable after stepping over the first recursive sub-call? (In other words, within `moveTower` just after stepping over the first recursive sub-call to `moveTower` inside the `else` statement.)
+A2.
+1
+
+Q3. After breaking at the base case of `moveTower` and then choosing Step Out, where do you end up? (What function are you in, and at what line number?) What is the value of the `totalMoves` variable at this point?
+A3. 
+I am on the next call of the recursive function, with totalMoves=0
+
+Q4. What is the smallest possible input that you used to trigger the bug in the program?
+A4. 
+Length of 1. eg: {1}. Buggy says there are 0 empty sets, but there is actually 1
+
+Q5. Identify the one-character error in the code and explain why that one-character bug causes the function to return the output you see when running on the minimal input you listed above. You should be able to specifically account for how the error causes the result to change from “completely correct” to “terribly wrong.”
+A5. 
+Using += instead of +. This generates an error because there are 2 recursive functions that we are calling. If we use += we modify the value of sumSoFar, which generates compounding problems
+
+Voting
+------
+Q13: Include the data from your execution timing and explain how is supports your Big O prediction for computePowerIndex.
+A13: 
+Big O of computerPowerIndex is n*2^n
+n because there is a for loop from 0 to n for each block. Additionally, within this for loop we call the recursive function which has complexity 2^n because for each block there are 2^n combinations to be tested (permutation)
+
+However, the numbers below don't support this because of doubling every increase in n, so actually 2^n in practice(see n from 21 to 26). I expect that the compiler is doing some type of optimization
+
+
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =        1) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =        2) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =        3) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =        4) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =        5) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =        6) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =        7) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =        8) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =        9) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       10) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       11) completed in    0.001 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       12) completed in    0.000 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       13) completed in    0.002 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       14) completed in    0.004 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       15) completed in    0.010 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       16) completed in    0.014 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       17) completed in    0.017 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       18) completed in    0.034 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       19) completed in    0.067 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       20) completed in    0.139 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       21) completed in    0.308 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       22) completed in    0.672 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       23) completed in    1.484 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       24) completed in    2.958 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       25) completed in    6.076 secs
+    Line 127 TIME_OPERATION computePowerIndexes(blocks) (size =       26) completed in   11.637 secs
+
+
+
+Q14: Use the timing and Big O to predict how long it would take to compute the power index for the 51 voting blocks in the US electoral system.
+A14: 
+TIME_OPERATION computePowerIndexes(blocks) (size =       15) completed in    0.012 secs
+if we create a formula Time = K*n*2^n and calculate for the time above
+we discover that K=0.000000025
+If we calculate now for n=51 and using Time = 0.000000025*51*2^51
+Time = 5,742,089,524.8974 seconds or 182 years
+
+To improve this model (given it's not feasible for this context), we would have to find ways to not ahve to do the whole combinations (i.e. transform recursions/functions into a logarithmic)

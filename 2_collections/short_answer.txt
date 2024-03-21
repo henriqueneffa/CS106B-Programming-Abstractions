@@ -1,0 +1,103 @@
+/*
+Author: Henrique Neffa
+Course: CS106B - Programming Abstractions
+Assignment: Assignment 2 - Warmup, Maze, Search Engine, and Beyond Algorithmic Analysis
+Instructor: Christopher Gregg
+Answers to short answers
+*/
+
+Warmup
+------
+
+Q1. The display of the Stack in the debugger uses the labels `top` and `bottom` to mark the two ends of the stack. How are the contents labeled when the Stack contains only one element?
+A1.
+It's displayed as below (on same line):
+bottom/top "NAME OF ELEMENT #1"
+
+Q2. For which type of inputs does the function go into an infinite loop?
+A2. 
+By testing other inputs, I discovered that whenever there is at least 1 negative input, it goes into an infinite loop.
+This happens because the loop consider the q.size by the end of the loop, so the Q.size continuously increase as we have negative numbers
+
+Q3. Show your edited code for `duplicateNegatives` that fixes the problem with the infinite loop.
+A3. 
+void duplicateNegatives(Queue<int>& q) {
+    int initialSizeQueue = q.size(); // Record size of initial queue
+    for (int i = 0; i < initialSizeQueue; i++) {
+        int val = q.dequeue();
+        q.enqueue(val);
+        if (val < 0) {
+            q.enqueue(val);   // double up on negative numbers
+        }
+    }
+}
+
+Q4. What is the better fix to `sumStack` that corrects the bug?
+A4. 
+To avoid performing a stack function on an empty stack, let's define total as 0 first, and only loop on the stack if it's not empty
+
+
+Maze
+----
+Q5. After you have written your test cases, describe your testing strategy to confirm that your `validatePath` operates as intended. How confident are you that it works correctly in all cases?
+A5. 
+
+I am confident, because I tested for the cases below:
+. The path is not empty
+. The path starts at the entry (upper left corner) of the maze
+. The path ends at the exit (lower right corner) of the maze
+. Each location in the path is a valid move from the previous path location
+. The path must not contain a loop, i.e. the same location cannot appear more than once in the path
+. Empty string works
+
+Q6. While BFS and DFS are equivalently capable in terms of finding a solution, the two can differ in which solution is found (when there are multiple) and how quickly a solution is discovered. An advantage of BFS is that it always finds the shortest possible solution, explain why this is guaranteed for BFS and not for DFS. An advantage of DFS is that for some mazes it will find a solution more quickly than BFS, explain how this could be so.
+A6. 
+BFS guarantees to find the shortest solution because it explores all nodes before moving on to the next level (prioritizing for the shortest one, so solution found is always the shortest).
+DFS explores fully a path before going for next one, so don't find shortest first. But DFS can be more quickly given it doesnt have to explore all nodes.
+
+Q7. Most students are sold on the benefit of the fancy features provided by `Vector`, `Grid`, and `Set` but the ADT skeptics may question the value of `Stack` and `Queue` ADTs, seeing them as nothing more than a restricted `Vector`. Make your best argument to convince them of the benefits these ADTS have over `Vector`.
+A7.
+Queue and Stack have very specific functions due to their nature of being LIFO- and FIFO-oriented, respectively. This generate use cases that utimately simplify some applications.
+Imagine in real life that every time you had to get a plate from a Vector you needed to get it from the bottom of the pile. How bad would that be? Just replicate this in programming life
+
+
+Search Engine
+-------------
+Q8. Sketch the contents of the inverted index built from the `res/tiny.txt` database file.
+A8. 
+Content would be:
+fish: www.shoppinglist.com, www.dr.seuss.net, www.bigbadwolf.com
+bread: www.shoppinglist.com
+red: www.rainbow.org, www.dr.seuss.net
+(...)
+
+tiny.txt
+www.shoppinglist.com
+milk, fish, bread, 5lb_m&ms
+www.rainbow.org
+red ~green <<blue>>
+www.dr.seuss.net
+One Fish Two Fish *Red* fish Blue fish ** 10 RED Fish?
+www.bigbadwolf.com
+I eat FISH
+
+
+
+Beyond Algorithmic Analysis
+---------------------------
+Q9. In a short paragraph, describe a real or plausible scenario not previously presented in lecture in which using techniques like benchmarking or counting "write" steps to improve the performance of an algorithm might benefit Earth's environment. Include your thoughts on how a software engineer working on this piece of code might identify such potential benefits and take them into consideration when designing the code.
+A9. 
+Every time we are going to use machines and computers, energy is used. If engineers, optimize towards minimizing writes and improving performance of algorithms, less energy will be used by this machine, and thus benefit the world by needing less energy (and most likely less fossil fuels)
+
+Q10. According to the contract that IBM struck with the state of Indiana, the criteria for optimization were improving efficiency of the overall welfare system and reducing fraud. Criteria for reducing wait times and wrongful denials were not included.  However, wrongfully denying benefits has a huge negative  impact on the citizens who rely on the system.  If criteria like minimizing wrongful denials were not included in the contract, should engineers have included them in their optimization algorithm?  Why or why not?
+A10. 
+Yes, it should have been included.
+Even if the main criteria still was efficiency, we could define a guardrail metric, which is a metric that does not have to be fully optimized but can't be lower than the benchmark defined. So, the success (in the perspective of the population) should be a guardrail metric that Engineers should consider in writing their code
+
+Q11. Imagine that after completing CS106B you are hired at IBM as an engineer working on this system. How might you have approached designing and setting the goals of this system?  How might you apply algorithmic analysis tools to build a system that achieved  the desired goals? Could you do so in a way that avoids the severe negative impacts on users of the system that are outlined in the case study?
+A11. 
+I would:
+- Keep the main objective metric as optimizing cost
+- I would create a guardrail metric that is related to the percentage of people who actually have their service completed (the benchmark should be the metric before IBM arrived, since this wasn't a problem before)
+- I would also track other metrics that could not be inputted into the model such as NPS (the satisfaction from the perspective of the user), so that we can revisit the code after seeing this result
+I think with this approach the problem could have been prevented

@@ -1,0 +1,112 @@
+/*
+Author: Henrique Neffa
+Course: CS106B - Programming Abstractions
+Assignment: Assignment 1 - Perfect Score and Soundex
+Instructor: Christopher Gregg
+*/
+
+Before submitting this file, make sure that there are no more TODO
+placeholders remaining in the file (and remove this comment too).
+
+Perfect Numbers
+---------------
+
+Before submitting this file, make sure that there are no more TODO
+placeholders remaining in the file (and remove this comment too).
+
+Q1. Roughly how long did it take your computer to do the search? How many perfect numbers were found and what were they?
+A1. 2500 ms
+
+Q2. Make a table of the timing results for `findPerfects` that you observed. (old-school table of text rows and columns is just fine)
+A2. A little more than 60 seconds though
+
+Correct (STUDENT_TEST, perfect.cpp:125) Multiple time trials of findPerfects on increasing input sizes
+    Line 130 TIME_OPERATION findPerfects(size) (size =    35000) completed in    1.487 secs
+    Line 130 TIME_OPERATION findPerfects(size) (size =    70000) completed in    5.616 secs
+    Line 130 TIME_OPERATION findPerfects(size) (size =   140000) completed in   20.688 secs
+    Line 130 TIME_OPERATION findPerfects(size) (size =   280000) completed in   82.323 secs
+
+Q3. Does it take the same amount of work to compute `isPerfect` on the number 10 as it does on the number 1000? Why or why not? Does it take the same amount of work for `findPerfects` to search the range of numbers from 1-1000 as it does to search the numbers from 1000-2000? Why or why not?
+A3: 
+First q: No, because the algorithm is testing for each number on the interval. 
+Second q: No, because for each number you have more divisors and the algorithm will thus take longer
+
+Q4. Extrapolate from the data you gathered and make a prediction: how long will it take `findPerfects` to reach the fifth perfect number?
+A4. About 11 full days (965000 seconds). See extrapolation below:
+35,000	1
+70,000	6
+140,000	21
+280,000	82
+560,000	314
+1,120,000	1,197
+2,240,000	4,565
+4,480,000	17,406
+8,960,000	66,374
+17,920,000	253,101
+35,840,000	965,139
+
+Q5. Do any of the tests still pass even with this broken function? Why or why not?
+A5. Yes, some still pass. For instance, 12 and 98765 are still not perfect. Just because starting in one they'd still be not perfect (most numbers are not perfect)
+
+Q6. Explain your testing strategy for `smarterSum` and how you chose your specific test cases that lead you to be confident the function is working correctly.
+A6. I tested for 2 numbers that should return a perfect numbers; 2 numbers that should NOT return perfect numbers; and tested for equality between smarter and normal function
+
+Q7. Record your timing results for `findPerfectsSmarter` into a table.
+A7. Reduced from  82 seconds to 1.4 seconds:
+    Line 175 TIME_OPERATION findPerfectsSmarter(size) (size =    35000) completed in    0.314 secs
+    Line 175 TIME_OPERATION findPerfectsSmarter(size) (size =    70000) completed in    0.412 secs
+    Line 175 TIME_OPERATION findPerfectsSmarter(size) (size =   140000) completed in    0.738 secs
+    Line 175 TIME_OPERATION findPerfectsSmarter(size) (size =   280000) completed in    1.373 secs
+
+Q8. Make a prediction: how long will `findPerfectsSmarter` take to reach the fifth perfect number?
+A8. 106 seconds. See trend calculated below:
+35,000	0.31
+70,000	0.41
+140,000	0.74
+280,000	1.37
+560,000	2.55
+1,120,000	4.75
+2,240,000	8.84
+4,480,000	16.45
+8,960,000	30.60
+17,920,000	56.93
+35,840,000	105.92
+
+
+Q9. Explain how you chose your specific test cases and why they lead you to be confident `findNthPerfectEuclid` is working correctly.
+A9. 
+I chose to select the first 4 Perfect Euclides and this makes me confident because this numbers are extremely specific
+
+Soundex
+-------
+
+Q10. What is the Soundex code for "Angelou"? What is the code for your own surname?
+A10. 
+Angelou > 0520400 > 05204 > A524
+Neffa > 50110 > 51 > N100
+Curie > 20600 > C0600 > 26 > C600
+
+Q11. Before writing any code, brainstorm your plan of attack and sketch how you might decompose the work into smaller tasks. Briefly describe your decomposition strategy.
+A11.
+Objective: Generate Soundex code from a surname.
+Steps:
+- Collect input of surnames
+- Discard all non-letters from surnames
+- Transform surname into a digit representation
+- Coalesce adjacent digits
+- Replace first digit for first letter of surname
+- Discard zeros or truncate to form exactly 4 digits
+
+Q12. Think about one or more examples of a class of names that the Soundex system might not work well for. Explain what this class of names is and why the system might incorrectly group them or mis-categorize one of the names.
+A12. 
+Thinking about a diverse culture, there are many languages not represented by the ASCII characters that when we remove these characters and consider only ASCII, the soundex might not be rerepsentative of the last names. FOr isntance, someone with the last name "ármândó"
+
+Talking about an error:
+First, the first char is introduced automatically without checking, generating a potential for `bringing a non-alpha character. Additionally, this wouldn't deal well with empty strings
+
+Q13. Suppose you are a software engineer working for the U.S. government. You have been tasked with implementing a system that collects names as part of the Census survey and analyzes these names using a phonetic algorithm. Your boss suggests using Soundex and notes that the algorithm is only expected to work for ASCII-encoded strings, since supporting Unicode would require extra work and time. What would your response be and why? What representational harms might result from building a system that exclusively uses Soundex and/or ASCII?
+A13. 
+
+I would tell my boss that this algorithm would not be equally effective across the population of the United States and that we wouldn't be treating fairly people from different origins who might have last names not represented in ASCII. For instance, a last name "ármândó" would be incorrectly grouped with other last names that don't have a similar sound simply because too many non-ASCII characters were eliminated.
+
+

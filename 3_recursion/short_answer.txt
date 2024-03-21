@@ -1,0 +1,126 @@
+/*
+Author: Henrique Neffa
+Course: CS106B - Programming Abstractions
+Assignment: Assignment 3 - Recursion Etudes
+Instructor: Christopher Gregg
+*/
+
+Warmup
+------
+
+Q1. Looking at a call stack listing in a debugger, what is the indication that the program being debugged uses recursion?
+A1. 
+The fact that a function appears multiple time at different levels
+
+Q2. Subtract the innermost level number from the outermost to get the maximum count of stack frames that fit in the capacity of the call stack. How many stack frames fit in your system's call stack?
+A2.
+At level 1, n = -43264. So, since we started with n=-3, my system most likely fits 43262 call stacks
+
+Q3. Describe how the symptoms of infinite recursion differ from the symptoms of an infinite loop.
+A3.
+Infinite recursion: the functin repeatedly calls itself without ever reaching the base case, thus it generates infinite call stacks
+Infinite loop: variable never achieve the value to leave the loop and consecutively keep operating within the loop
+
+Q4. In place of selecting values over a defined range, an alternate approach would be to randomly select values for base and exponent. Such a test case would test something different each time you ran it. This test approach is part of a larger approach known as "fuzz" testing. What do you see as possible benefit and downside of randomness being used in a test case?
+A4. 
+Benefits:
+- Test cases we wouldn't have anticipated
+Cons:
+- Might not test all edge cases for every run of the program (requires running many times)
+
+Q5. What was the number of iterations of `recPower` did it take on your system to amount to a quarter second? Copy/paste the time results of the two time trial sequences running on that number of iterations.
+A5. 
+On the functions below, the program starts taking very long to run, but it's very hard to find the point of quarter second (because the program either takes too long or do in 0s)
+PROVIDED_TEST("Time trial recPower, double base, keep exp constant") {
+    for (int size = 4; size <= 100000000; size *= 5) {
+        TIME_OPERATION(size, manyPowerCalls(size, 5));
+    }
+}
+
+PROVIDED_TEST("Time trial recPower, keep base constant, double exp") {
+    for (int size = 4; size <= 100000000; size *= 5) {
+        TIME_OPERATION(size, manyPowerCalls(5, size));
+    }
+}
+
+
+Correct (PROVIDED_TEST, line 101) Time trial recPower, double base, keep exp constant
+    Line 103 TIME_OPERATION manyPowerCalls(size, 5) (size =        4) completed in    0.000 secs
+    Line 103 TIME_OPERATION manyPowerCalls(size, 5) (size =       20) completed in    0.000 secs
+    Line 103 TIME_OPERATION manyPowerCalls(size, 5) (size =      100) completed in    0.000 secs
+    Line 103 TIME_OPERATION manyPowerCalls(size, 5) (size =      500) completed in    0.000 secs
+    Line 103 TIME_OPERATION manyPowerCalls(size, 5) (size =     2500) completed in    0.000 secs
+    Line 103 TIME_OPERATION manyPowerCalls(size, 5) (size =    12500) completed in    0.000 secs
+    Line 103 TIME_OPERATION manyPowerCalls(size, 5) (size =    62500) completed in    0.000 secs
+    Line 103 TIME_OPERATION manyPowerCalls(size, 5) (size =   312500) completed in    0.000 secs
+    Line 103 TIME_OPERATION manyPowerCalls(size, 5) (size =  1562500) completed in    0.000 secs
+    Line 103 TIME_OPERATION manyPowerCalls(size, 5) (size =  7812500) completed in    0.000 secs
+
+Correct (PROVIDED_TEST, line 107) Time trial recPower, keep base constant, double exp
+    Line 109 TIME_OPERATION manyPowerCalls(5, size) (size =        4) completed in    0.000 secs
+    Line 109 TIME_OPERATION manyPowerCalls(5, size) (size =       20) completed in    0.000 secs
+    Line 109 TIME_OPERATION manyPowerCalls(5, size) (size =      100) completed in    0.000 secs
+    Line 109 TIME_OPERATION manyPowerCalls(5, size) (size =      500) completed in    0.000 secs
+    Line 109 TIME_OPERATION manyPowerCalls(5, size) (size =     2500) completed in    0.000 secs
+    Line 109 TIME_OPERATION manyPowerCalls(5, size) (size =    12500) completed in    0.000 secs
+    Line 109 TIME_OPERATION manyPowerCalls(5, size) (size =    62500) completed in    0.000 secs
+    Line 109 TIME_OPERATION manyPowerCalls(5, size) (size =   312500) completed in    0.000 secs
+    Line 109 TIME_OPERATION manyPowerCalls(5, size) (size =  1562500) completed in    0.000 secs
+    Line 109 TIME_OPERATION manyPowerCalls(5, size) (size =  7812500) completed in    0.000 secs
+
+Q6. Explain how the recursive structure of `recPower` results in a Big-O runtime of `O(lgN)` relative to the size of its `exp` argument.
+A6. 
+The function halves the exponent in each step, thus the function significantly reduces the number of recursive calls
+
+
+Balanced
+--------
+
+Q7. Compare your recursive solution to the iterative approach used for the Check Balance problem in [Section 1][section1]. Which version do you find easier to read and understand? In which version did you find it easier to confirm the correct behavior?
+A7. 
+I find it easier to understand the solution in Check Balance approach simply because understanding a Recursion function is not too visual and direct (I usually have to draw the relationship in a piece of paper).
+
+Merge
+-----
+
+Q8. Give a rough estimate of the maximum length sequence that could be successfully merged on your system assuming a recursive implementation of `binaryMerge`.
+A8. 
+On Q2, I said that my system could handle 43262 call stacks, so I'd assume the recursion would work up until that number of call stacks (number of recursion calls required)
+
+Q9. What would be the observed behavior if attempting to recursively merge a sequence larger than that maximum?
+A9. 
+The program would crash given it would identify it reached a stack overflow
+
+Q10. Include the data from your execution timing and explain how it supports your Big O prediction for `binaryMerge`.
+A10. 
+My Big O prediction was n, since we go one by one in each element of the queue (so n times considering both queues). The data below supports this since as we double the size, the time also doubles (scales linearly)
+
+[SimpleTest] starting (STUDENT_TEST, line 186) Time binaryMerge operation wit...  =  Correct
+    Line 191 TIME_OPERATION binaryMerge(a, b) (size =  1000000) completed in    0.097 secs
+    Line 191 TIME_OPERATION binaryMerge(a, b) (size =  2000000) completed in    0.194 secs
+    Line 191 TIME_OPERATION binaryMerge(a, b) (size =  4000000) completed in    0.391 secs
+    Line 191 TIME_OPERATION binaryMerge(a, b) (size =  8000000) completed in    0.810 secs
+
+Q11. Include the data from your execution timing and explain how it supports your Big O prediction for `naiveMultiMerge`.
+A11.  
+The Big O is still linear (n), because we still iterate over the terms in all the Queues only once. As seen below, it scales linearly. If we were to be more precise, it's actually 2n because each Queues is looked along with the result Queue (since the binaryMerge look every 2 together).
+
+[SimpleTest] starting (STUDENT_TEST, line 195) Time naiveMultiMerge in a for ...  =  Correct
+    Line 209 TIME_OPERATION naiveMultiMerge(manyQueues) (size =  1000000) completed in    0.236 secs
+    Line 209 TIME_OPERATION naiveMultiMerge(manyQueues) (size =  2000000) completed in    0.478 secs
+    Line 209 TIME_OPERATION naiveMultiMerge(manyQueues) (size =  4000000) completed in    0.989 secs
+    Line 209 TIME_OPERATION naiveMultiMerge(manyQueues) (size =  8000000) completed in    1.921 secs
+
+Q12. Include the data from your execution timing and explain how it demonstrates `O(n log k)` runtime for `recMultiMerge`.
+A12. 
+As you can see below, the recMultiMerge was more efficient. The function scales much more efficiently given that k scales logarithmically (since we are dividing the operations). 
+
+[SimpleTest] starting (STUDENT_TEST, line 214) Time recMultiMerge in a for lo...  =  Correct
+    Line 228 TIME_OPERATION recMultiMerge(manyQueues) (size =  1000000) completed in    0.200 secs
+    Line 228 TIME_OPERATION recMultiMerge(manyQueues) (size =  2000000) completed in    0.401 secs
+    Line 228 TIME_OPERATION recMultiMerge(manyQueues) (size =  4000000) completed in    0.815 secs
+    Line 228 TIME_OPERATION recMultiMerge(manyQueues) (size =  8000000) completed in    1.658 secs
+
+Q13. You run `recMultiMerge` on a sequence of size 1 million and see that it completes just fine. Explain why this is not running afoul of the call stack capacity limitation.  _Hint_: How many stack frames (levels) are expected to be on the call stack at the deepest point in the recursion in `recMultiMerge`?
+A13. 
+Even though we have 1 million elements, given the function is implemented recursively using the divide-and-conquer method, the number of call stacks actually increase logarithmically, not reaching the actual 1 million elements (much less). I'd expect to only have 20 levels on the call stack ( 1million divided by 2^20 =~1)

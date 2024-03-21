@@ -1,0 +1,87 @@
+/*
+Author: Henrique Neffa
+Course: CS106B - Programming Abstractions
+Assignment: Assignment 7 - Huffman Coding
+Instructor: Christopher Gregg
+*/
+
+
+
+Q1. Use the above encoding tree to decode the bit sequence `0101100011`.
+A1. 
+010 1 1 00 011
+MOONS
+
+Q2. Prepare a table for the above encoding tree that lists each character with its assigned bit sequence.
+Use your table to encode the string `"SONS"`.
+A2. 
+00  N
+010 M
+011 S
+1   O
+
+011 1 00 011
+
+Q3. Huffman codes obey the _prefix_ property: no character's encoded bit sequence is a prefix of any other.
+What feature of an encoding tree demonstrates that it obeys the prefix property?
+A3. 
+The fact that all nodes with children are unassigned (or assigned as *); only leaves are assigned
+
+Q4. Flatten the encoding tree above on the right into its sequence of bits (tree shape) and sequence of characters (tree leaves).
+A4. 
+1101000
+
+Q5. Unflatten the sequences `110100100` (tree shape) and `FLERA` (tree leaves) to reconstruct the original encoding tree.
+A5. 
+           *
+     *          *
+  F     *      R A 
+       L  E
+
+
+Q6. Construct a Huffman coding tree for the input `"BOOKKEEPER"`.
+A6. 
+                      *
+		    /   \
+                   *     *
+                  /  \   /\
+                 O   *  E  *
+                     /\    /\
+                    B  P  R  K
+
+
+Q7. Calculate the entropy of your Huffman tree for `"BOOKKEEPER"`.
+Confirm that if you had chosen to break ties in a different manner when constructing the tree,
+this alternate tree has the same entropy as the optimal result.
+A7. 
+O=2*2=4
+B=3*1=3
+P=3*1=3
+E=2*3=6
+R=3*1=3
+K=3*2=6
+Total=25
+
+Q8. Consider the space of inputs of length 1000 that consists of varied occurrences of 100 distinct characters.
+Of those various inputs, contrast which inputs result in a balanced Huffman tree versus those that produce a
+very lopsided Huffman tree. As an example, what if each of the 100 characters were represented 10 times
+(for a total of 1000 characters)? What would the Huffman tree look like?
+What if, instead, 99 of the characters was represented only once, but the remaining character was represented 901 times (again, for a total of 1000 characters)? What would the Huffman tree look like?
+Which of the two Huffman trees achieves more significant compression?
+What does this tell you about what makes for a "good" versus "bad" Huffman tree?
+A8. 
+
+Each of 100 characters represented 10 times each: We will have a very balanced tree
+
+1 representing 901 and 99 representing 1 each: we have to guarantee the element with 901 is on the 1st layer, and then we have a balanced tree on the other side
+
+The latter achieves more compression given concentration of elements. Therefore, Huffman trees don't work like BST in that a fully balanced tree has necessarily a better performance.
+
+EXTRA:
+I used my final code to test compressing 4 different files: a photo, a video, a paper I wrote, and a Stanford logo. These are the compressions in each:
+paper - 5%
+Stanford logo - 3%
+photo - 1%
+video - 0%
+
+These were according to my expectations since a photo and a video are contained of many pixels that are highly different among each other and thus there isn't a clear concentration of information. At the same time a Stanford PNG logo, is composed of a vector that compounds many images of same color, and thus there is a concentration of information to be compressed. My paper likely also had a concentration on characters are most used in the english language. It is interesting to notice that now understanding how the algorith works, I can predict how much I will be able to compress out of a given file.
